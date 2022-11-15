@@ -1,10 +1,9 @@
-import { Server, TLSSocket, SecureContextOptions, createSecureContext, createServer } from 'tls';
-import {readFileSync} from 'fs';
+import { TLSSocket } from 'tls';
 import * as util from 'util';
 
 import { Message, Response, ResponseParser, ResponseStatus, OnePingResponse } from 'lutron-leap';
 
-class ParserResponder {
+export class ParserResponder {
     private responseParser: ResponseParser;
 
     constructor(public socket: TLSSocket) {
@@ -58,43 +57,6 @@ class ParserResponder {
             console.log(`Incoming was ${util.inspect(request)}`);
             console.log("tag was ", request.Header.ClientTag);
 
-        }
-    }
-}
-
-export class FakeLeapServer {
-
-    private server: Server;
-    private connections: Array<ParserResponder>;
-
-    constructor(keyFileName: string, certFileName: string) {
-
-        this.connections = new Array();
-
-        const tlsOptions = {
-            key: readFileSync(keyFileName),
-            cert: readFileSync(certFileName),
-        };
-
-        this.server = createServer(tlsOptions, socket => {
-            console.log("new connection");
-            const r = new ParserResponder(socket);
-            socket.on('data', r.handleSocketData.bind(r));
-            this.connections.push(r);
-        });
-    }
-
-    public startServer() {
-        this.server.listen(8081, '127.0.0.1', function() {
-            console.log("listening");
-        });
-
-    }
-
-    public die() {
-        this.server.close();
-        for (const conn of this.connections) {
-            conn.socket.destroy();
         }
     }
 }

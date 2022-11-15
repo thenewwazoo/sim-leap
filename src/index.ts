@@ -1,16 +1,10 @@
-import { Server, TLSSocket, SecureContextOptions, createSecureContext, createServer } from 'tls';
-import { readFileSync } from 'fs';
-import * as util from 'util';
-
 import * as keypress from 'keypress';
 
-import { Message, Response, ResponseParser, ResponseStatus, OnePingResponse } from 'lutron-leap';
-
-import {FakeLeapServer} from './FakeLeapServer';
+import { FakeSmartBridge } from './Server';
 
 keypress(process.stdin);
 
-const srv = new FakeLeapServer('./key.pem', './cert.pem');
+const srv = new FakeSmartBridge('./key.pem', './cert.pem');
 
 process.stdin.on('keypress', (ch, key) => {
 
