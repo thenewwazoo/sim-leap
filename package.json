@@ -1,0 +1,28 @@
+{
+    "name": "sim-leap",
+    "version": "1.0.0",
+    "description": "Simulated LEAP server",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist/**/*"
+    ],
+    "license": "GPL-3.0",
+    "author": "Brandon Matthews <thenewwazoo@optimaltour.us>",
+    "scripts": {
+        "lint": "eslint src/**.ts --max-warnings=0 --fix",
+        "run": "npm run build && npm link && node dist/index.js",
+        "build": "rimraf ./dist && tsc",
+        "prepublishOnly": "npm run lint && npm run build",
+        "test": "jest --verbose"
+    },
+    "dependencies": {
+        "keypress": "^0.2.1",
+        "lutron-leap": "file:../lutron-leap",
+        "nodemon": "^2.0.20",
+        "rimraf": "^3.0.2",
+        "ts-node": "^10.9.1",
+        "typed-emitter": "^2.1.0",
+        "typescript": "^4.8.4"
+    }
+}
