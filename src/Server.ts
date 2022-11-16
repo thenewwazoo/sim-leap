@@ -1,8 +1,10 @@
+import debug from 'debug';
 import { Server, createServer } from 'tls';
 import {readFileSync} from 'fs';
 
 import { ParserResponder } from './ParserResponder';
 
+const logDebug = debug('leap:sim:bridge');
 
 export class FakeSmartBridge {
 
@@ -11,7 +13,7 @@ export class FakeSmartBridge {
 
     constructor(keyFileName: string, certFileName: string) {
 
-        this.connections = new Array();
+        this.connections = [];
 
         const tlsOptions = {
             key: readFileSync(keyFileName),
@@ -19,7 +21,7 @@ export class FakeSmartBridge {
         };
 
         this.server = createServer(tlsOptions, socket => {
-            console.log("new connection");
+            logDebug('new connection');
             const r = new ParserResponder(socket);
             socket.on('data', r.handleSocketData.bind(r));
             this.connections.push(r);
@@ -27,8 +29,8 @@ export class FakeSmartBridge {
     }
 
     public startServer() {
-        this.server.listen(8081, '127.0.0.1', function() {
-            console.log("listening");
+        this.server.listen(8081, '127.0.0.1', () => {
+            logDebug('listening');
         });
 
     }
