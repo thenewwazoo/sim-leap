@@ -1,7 +1,9 @@
 import * as keypress from 'keypress';
-import debug from 'debug';
 
 import { FakeSmartBridge } from './Server';
+import { startAdvertiser } from './resolver';
+
+startAdvertiser();
 
 keypress(process.stdin);
 
@@ -12,6 +14,7 @@ process.stdin.on('keypress', (ch, key) => {
     if (key && key.ctrl && key.name === 'c') {
         process.stdin.pause();
         srv.die();
+        process.exit();
     } else if (key && key.name === 'k') {
         console.log('killing server');
         srv.die();
